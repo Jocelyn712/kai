@@ -444,6 +444,10 @@
       animation: toastIn 0.3s ease forwards;
     }
 
+    .add-review-toast.hidden {
+      display: none;
+    }
+
     @keyframes toastIn {
       to { opacity: 1; }
     }
@@ -867,6 +871,7 @@
               currentWords.push(lesson.words[item.wordIndex]);
             }
           });
+          currentWords = shuffleArray(currentWords);
           currentLessonIndex = -1;
           currentWordIndex = 0;
           bopomofoWrap.classList.add("hidden");
@@ -926,6 +931,7 @@
         currentWords = lesson.words.map(function (w, wi) {
           return { char: w.char, bopomofo: w.bopomofo, lessonIndex: currentLessonIndex, wordIndex: wi };
         });
+        currentWords = shuffleArray(currentWords);
         currentWordIndex = 0;
         bopomofoWrap.classList.add("hidden");
         cardBox.classList.remove("show-bopomofo", "flip-show");
@@ -965,6 +971,8 @@
       }
 
       function showBopomofo() {
+        addReviewToast.classList.add("hidden");
+        addReviewToast.textContent = "";
         bopomofoWrap.classList.remove("hidden");
         cardBox.classList.add("show-bopomofo");
         requestAnimationFrame(function () {
@@ -972,7 +980,6 @@
         });
         if (!isReviewMode) {
           addReviewWrap.classList.remove("hidden");
-          addReviewToast.classList.add("hidden");
         }
       }
 
@@ -1118,6 +1125,8 @@
       function nextCard() {
         if (currentWords.length === 0) return;
         addReviewWrap.classList.add("hidden");
+        addReviewToast.classList.add("hidden");
+        addReviewToast.textContent = "";
         currentWordIndex += 1;
         if (currentWordIndex >= currentWords.length) {
           if (isReviewMode) {
