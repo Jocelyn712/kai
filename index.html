@@ -742,6 +742,8 @@
       var correctStreak = 0;
       var STREAK_TARGET = 5;
       var currentRangeLabel = "";
+      var currentRangePool = [];
+      var MIXED_LIMIT = 20;
 
       function getReviewList() {
         try {
@@ -908,7 +910,8 @@
               }
             }
           }
-          currentWords = shuffleArray(currentWords);
+          currentRangePool = currentWords.slice();
+          currentWords = shuffleArray(currentWords).slice(0, MIXED_LIMIT);
           currentLessonIndex = -2;
           currentWordIndex = 0;
           bopomofoWrap.classList.add("hidden");
@@ -1181,7 +1184,9 @@
 
       levelModalAgain.addEventListener("click", function () {
         levelModalBackdrop.classList.add("hidden");
-        if (currentLessonIndex === -2) {
+        if (currentLessonIndex === -2 && currentRangePool.length > 0) {
+          currentWords = shuffleArray(currentRangePool.slice()).slice(0, MIXED_LIMIT);
+        } else if (currentLessonIndex === -2) {
           currentWords = shuffleArray(currentWords);
         }
         currentWordIndex = 0;
